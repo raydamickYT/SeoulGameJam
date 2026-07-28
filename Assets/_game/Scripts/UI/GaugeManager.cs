@@ -11,7 +11,7 @@ public class GaugeManager : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     public GaugeSides side = GaugeSides.Top;
-    public float MaxGaugeAmount = 4;
+    public float MaxGaugeAmount = 31;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

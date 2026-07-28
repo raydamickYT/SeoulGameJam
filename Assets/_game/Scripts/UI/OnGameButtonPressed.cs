@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 public class OnGameButtonPressed : MonoBehaviour
 {
     [SerializeField] private UIDocument _uiDocument;
-    [SerializeField] private float maxTime = 5f;
+    [SerializeField] private float maxTime = 5f, maxTimeRandomVariation = 0.5f;
 
     private Button btnTop, btnBottom;
 
@@ -78,19 +78,17 @@ public class OnGameButtonPressed : MonoBehaviour
     //** Count seconds pressed
     IEnumerator WaitForSeconds(float seconds, Button btn)
     {
-        float elapsedTime = 0f;
-        int clampedTime = 0;
         GaugeSides side = btn == btnTop ? GaugeSides.Top : GaugeSides.Bottom;
-
-        while (elapsedTime < seconds)
+        float holdTime = 0f;
+        float randMaxHoldTime = UnityEngine.Random.Range(maxTime - 0.5f, maxTime + 0.5f);
+        Debug.Log(randMaxHoldTime);
+        float maxGauge = 31f;
+        while (holdTime < randMaxHoldTime)
         {
-            elapsedTime += Time.deltaTime;
-            // Debug.Log("clamped time: " + Mathf.FloorToInt(elapsedTime) + " seconds");
-            if (elapsedTime > clampedTime)
-            {
-                clampedTime = Mathf.FloorToInt(elapsedTime);
-                EventManager.Instance.TriggerDelegate(GaugeEvents.UpdateGauge, elapsedTime, side); //update the gauges.
-            }
+            holdTime += Time.deltaTime; 
+            float value = (holdTime / randMaxHoldTime) * maxGauge;
+            
+            EventManager.Instance.TriggerDelegate(GaugeEvents.UpdateGauge, value, side);
             yield return null;
         }
     }

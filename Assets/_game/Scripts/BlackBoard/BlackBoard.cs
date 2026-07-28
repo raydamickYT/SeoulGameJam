@@ -7,8 +7,8 @@ public static class BlackBoard
 
     public static void SetGaugeValue(GaugeSides side, float value)
     {
-        Debug.Log(side);
-        var normalized = Mathf.Clamp01(value / 4); //*! 4 moet je updaten naar een ander getal als de float in de animator verandert
+        // Debug.Log(side);
+        var normalized = Mathf.Clamp01(value / 31); //*! 4 moet je updaten naar een ander getal als de float in de animator verandert
 
         if (side == GaugeSides.Top)
             TopGaugeValue = normalized;

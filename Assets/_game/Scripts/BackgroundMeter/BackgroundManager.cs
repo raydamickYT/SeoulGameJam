@@ -29,7 +29,7 @@ public class BackgroundManager : MonoBehaviour
     {
         //Als top 0 is, maar bottom -1. dan wint -1. en andersom. beide zullen vrijwel nooit tegelijk 1 en -1 zijn. en zo wel dan cancelen ze
         float delta = BlackBoard.BottomGaugeValue - BlackBoard.TopGaugeValue;
-        Debug.Log(BlackBoard.BottomGaugeValue + " " + BlackBoard.TopGaugeValue);
+        // Debug.Log(BlackBoard.BottomGaugeValue + " " + BlackBoard.TopGaugeValue);
         
         targetProgress += delta;
         targetProgress = Mathf.Clamp(targetProgress, yMin, yMax);
