@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -56,6 +57,8 @@ public class OnGameButtonPressed : MonoBehaviour
     void OnButtonReleased(PointerUpEvent e)
     {
         var btn = e.target as Button;
+        GaugeSides side = btn == btnTop ? GaugeSides.Top : GaugeSides.Bottom;
+
         IEnumerator routine = null;
         if (btn == btnTop)
         {
@@ -68,11 +71,11 @@ public class OnGameButtonPressed : MonoBehaviour
             BottomButtonCoroutine = null;
         }
 
-        EventManager.Instance.TriggerUnityEvent(GaugeEvents.ResetGauge);
+        EventManager.Instance.TriggerDelegate(ButtonEvents.OnButtonPointeUp, side);
         StopCoroutine(routine);
     }
 
-
+    //** Count seconds pressed
     IEnumerator WaitForSeconds(float seconds, Button btn)
     {
         float elapsedTime = 0f;
@@ -86,9 +89,14 @@ public class OnGameButtonPressed : MonoBehaviour
             if (elapsedTime > clampedTime)
             {
                 clampedTime = Mathf.FloorToInt(elapsedTime);
-                EventManager.Instance.TriggerDelegate(GaugeEvents.UpdateGauge, elapsedTime, side); //update the guages.
+                EventManager.Instance.TriggerDelegate(GaugeEvents.UpdateGauge, elapsedTime, side); //update the gauges.
             }
             yield return null;
         }
     }
+}
+
+public static class ButtonEvents
+{
+    public const string OnButtonPointeUp = "OnButtonPointerup";
 }
