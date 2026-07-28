@@ -44,8 +44,11 @@ public class OnGameButtonPressed : MonoBehaviour
     void OnButtonPressed(PointerDownEvent e)
     {
         var btn = e.target as Button;
+        GaugeSides side = btn == btnTop ? GaugeSides.Top : GaugeSides.Bottom;
 
-        var routine = WaitForSeconds(maxTime, btn);
+        if (BlackBoard.IsBroken(side)) return;
+
+        var routine = WaitForSeconds(btn);
         if (btn == btnTop)
             TopButtonCoroutine = routine;
         else
@@ -72,11 +75,12 @@ public class OnGameButtonPressed : MonoBehaviour
         }
 
         EventManager.Instance.TriggerDelegate(ButtonEvents.OnButtonPointeUp, side);
-        StopCoroutine(routine);
+        if (routine != null)
+            StopCoroutine(routine);
     }
 
     //** Count seconds pressed
-    IEnumerator WaitForSeconds(float seconds, Button btn)
+    IEnumerator WaitForSeconds(Button btn)
     {
         GaugeSides side = btn == btnTop ? GaugeSides.Top : GaugeSides.Bottom;
         float holdTime = 0f;
@@ -85,9 +89,11 @@ public class OnGameButtonPressed : MonoBehaviour
         float maxGauge = 31f;
         while (holdTime < randMaxHoldTime)
         {
-            holdTime += Time.deltaTime; 
+            if (BlackBoard.IsBroken(side)) yield break;
+
+            holdTime += Time.deltaTime;
             float value = (holdTime / randMaxHoldTime) * maxGauge;
-            
+
             EventManager.Instance.TriggerDelegate(GaugeEvents.UpdateGauge, value, side);
             yield return null;
         }

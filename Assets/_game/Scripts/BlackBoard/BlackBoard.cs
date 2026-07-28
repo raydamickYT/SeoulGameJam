@@ -4,6 +4,7 @@ public static class BlackBoard
 {
     public static float TopGaugeValue, BottomGaugeValue;
     public static float VisualMeterValue;
+    public static bool TopGaugeIsBroken, BottomGaugeIsBroken;
 
     public static void SetGaugeValue(GaugeSides side, float value)
     {
@@ -23,5 +24,23 @@ public static class BlackBoard
             TopGaugeValue = 0;
         if (side == GaugeSides.Bottom)
             BottomGaugeValue = 0;
+    }
+
+    public static void SetGaugeIsBroken(GaugeSides side, bool isBroken)
+    {
+        if (side == GaugeSides.Top)
+            TopGaugeIsBroken = isBroken;
+        if (side == GaugeSides.Bottom)
+            BottomGaugeIsBroken = isBroken;
+    }
+
+    public static bool IsBroken(GaugeSides side)
+    {
+        if (side == GaugeSides.Top)
+            return TopGaugeIsBroken;
+        if (side == GaugeSides.Bottom)
+            return BottomGaugeIsBroken;
+            
+        return false;
     }
 }
