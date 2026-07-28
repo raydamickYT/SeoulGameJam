@@ -6,24 +6,26 @@ public static class BlackBoard
     public static float VisualMeterValue;
     public static bool TopGaugeIsBroken, BottomGaugeIsBroken;
 
+    public static float TopHoldMultiplier = 1f;
+    public static float BottomHoldMultiplier = 1f;
+    public static bool TopAltGauge, BottomAltGauge;
+
     public static void SetGaugeValue(GaugeSides side, float value)
     {
-        // Debug.Log(side);
-        var normalized = Mathf.Clamp01(value / 31); //*! 4 moet je updaten naar een ander getal als de float in de animator verandert
+        var normalized = Mathf.Clamp01(value / 31f);
 
         if (side == GaugeSides.Top)
             TopGaugeValue = normalized;
         if (side == GaugeSides.Bottom)
             BottomGaugeValue = normalized;
-
     }
 
     public static void ResetGauge(GaugeSides side)
     {
         if (side == GaugeSides.Top)
-            TopGaugeValue = 0;
+            TopGaugeValue = 0f;
         if (side == GaugeSides.Bottom)
-            BottomGaugeValue = 0;
+            BottomGaugeValue = 0f;
     }
 
     public static void SetGaugeIsBroken(GaugeSides side, bool isBroken)
@@ -40,7 +42,33 @@ public static class BlackBoard
             return TopGaugeIsBroken;
         if (side == GaugeSides.Bottom)
             return BottomGaugeIsBroken;
-            
+
         return false;
+    }
+
+    public static void SetHoldMultiplier(GaugeSides side, float multiplier)
+    {
+        if (side == GaugeSides.Top)
+            TopHoldMultiplier = multiplier;
+        else
+            BottomHoldMultiplier = multiplier;
+    }
+
+    public static float GetHoldMultiplier(GaugeSides side)
+    {
+        return side == GaugeSides.Top ? TopHoldMultiplier : BottomHoldMultiplier;
+    }
+
+    public static void SetAltGauge(GaugeSides side, bool enabled)
+    {
+        if (side == GaugeSides.Top)
+            TopAltGauge = enabled;
+        else
+            BottomAltGauge = enabled;
+    }
+
+    public static bool GetAltGauge(GaugeSides side)
+    {
+        return side == GaugeSides.Top ? TopAltGauge : BottomAltGauge;
     }
 }

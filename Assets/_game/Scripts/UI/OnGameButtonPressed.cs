@@ -84,8 +84,8 @@ public class OnGameButtonPressed : MonoBehaviour
     {
         GaugeSides side = btn == btnTop ? GaugeSides.Top : GaugeSides.Bottom;
         float holdTime = 0f;
-        float randMaxHoldTime = UnityEngine.Random.Range(maxTime - 0.5f, maxTime + 0.5f);
-        Debug.Log(randMaxHoldTime);
+        float mult = BlackBoard.GetHoldMultiplier(side);
+        float randMaxHoldTime = UnityEngine.Random.Range(maxTime - 0.5f, maxTime + 0.5f) * mult;
         float maxGauge = 31f;
         while (holdTime < randMaxHoldTime)
         {

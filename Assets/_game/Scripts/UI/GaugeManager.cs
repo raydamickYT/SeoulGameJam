@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// This script will update the gauge's visual state according to how long the player has been holding the button.
@@ -15,18 +14,41 @@ public class GaugeManager : MonoBehaviour
     public float BrokenTime = 10;
     private bool isbroken = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    const string AnimatorGaugeAmountString = "GaugeAmount";
+    const string AnimatorAltGaugeString = "GaugeAlt";
+
+    float gaugeValue;
+
     void Start()
     {
-        //*onbutton pressed
         EventManager.Instance.AddDelegateListener(GaugeEvents.UpdateGauge, (Action<float, GaugeSides>)OnUpdateGauge);
-
-        //*onbutton released
         EventManager.Instance.AddDelegateListener(ButtonEvents.OnButtonPointeUp, (Action<GaugeSides>)UpdateBlackBoard);
+        EventManager.Instance.AddDelegateListener("ItemModifierChanged", (Action<GaugeSides>)OnModifierChanged);
+
+        ApplyAltGaugeVisual(BlackBoard.GetAltGauge(side));
     }
 
-    string AnimatorGaugeAmountString = "GaugeAmount";
-    float gaugeValue;
+    void OnModifierChanged(GaugeSides changedSide)
+    {
+        if (changedSide != side) return;
+        ApplyAltGaugeVisual(BlackBoard.GetAltGauge(side));
+    }
+
+    void ApplyAltGaugeVisual(bool alt)
+    {
+        // Optional animator bool — add "GaugeAlt" to the controller when you have the alt look ready.
+        if (animator == null) return;
+
+        foreach (var p in animator.parameters)
+        {
+            if (p.name == AnimatorAltGaugeString && p.type == AnimatorControllerParameterType.Bool)
+            {
+                animator.SetBool(AnimatorAltGaugeString, alt);
+                return;
+            }
+        }
+    }
+
     void OnUpdateGauge(float value, GaugeSides btnSide)
     {
         if (isbroken) return;
@@ -35,9 +57,9 @@ public class GaugeManager : MonoBehaviour
 
         gaugeValue = value;
 
-        animator.SetFloat(AnimatorGaugeAmountString, Mathf.Clamp(value, 0, MaxGaugeAmount)); //make sure the value doesnt exceed the max amount by more than 0.1f
+        animator.SetFloat(AnimatorGaugeAmountString, Mathf.Clamp(value, 0, MaxGaugeAmount));
 
-        if (value >= MaxGaugeAmount - 0.01f) // of >= MaxGaugeAmount
+        if (value >= MaxGaugeAmount - 0.01f)
             BreakGauge();
     }
 
@@ -46,23 +68,22 @@ public class GaugeManager : MonoBehaviour
         if (isbroken) return;
         isbroken = true;
         animator.SetBool("GaugeIsBroken", true);
-        Debug.Log("broken");
         BlackBoard.SetGaugeIsBroken(side, isbroken);
-        StartCoroutine(WaitForSecondsToResetGauge(100f));
+        StartCoroutine(WaitForSecondsToResetGauge(BrokenTime));
     }
+
     void UpdateBlackBoard(GaugeSides btnSide)
     {
         if (isbroken) return;
         if (side != btnSide) return;
 
-        BlackBoard.SetGaugeValue(side, gaugeValue); //*set gauge value in blackboard 
-        EventManager.Instance.TriggerUnityEvent(BackgroundManagerEvents.UpdateMeter); //*? deze functie wordt gecalled wnr je de knop released dus hier zou het moeten werken
+        BlackBoard.SetGaugeValue(side, gaugeValue);
+        EventManager.Instance.TriggerUnityEvent(BackgroundManagerEvents.UpdateMeter);
 
-        StartCoroutine(WaitForSecondsToResetGauge(0.5f)); //reset gauge
+        StartCoroutine(WaitForSecondsToResetGauge(0.5f));
     }
 
-    //delay de reset met een kleine tijd
-    IEnumerator WaitForSecondsToResetGauge(float seconds) //*reset gauges
+    IEnumerator WaitForSecondsToResetGauge(float seconds)
     {
         yield return new WaitForSeconds(seconds);
 
