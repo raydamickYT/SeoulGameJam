@@ -13,6 +13,6 @@ public class LongItem : PickupItem
     protected override void OnCollected()
     {
         GaugeSides victim = Opposite(intendedSide);
-        manager.ApplyHoldDebuff(victim, holdMultiplier, durationSeconds, SizeMultiplier, altGauge: true);
+        manager.ApplyLongGaugeDebuff(victim, holdMultiplier, durationSeconds, SizeMultiplier, altGauge: true);
     }
 }

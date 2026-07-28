@@ -12,6 +12,11 @@ public static class BlackBoard
     public static float BottomGaugeSizeMultiplier = 1f;
     public static bool TopAltGauge, BottomAltGauge;
 
+    // --- AGENT: tug stand voor KO-spawn check (gezet door BackgroundManager) ---
+    public static float TugTargetProgress;
+    public static float TugYMin = -5f;
+    public static float TugYMax = 5f;
+
     public static void SetGaugeValue(GaugeSides side, float value)
     {
         var normalized = Mathf.Clamp01(value / 31f);
