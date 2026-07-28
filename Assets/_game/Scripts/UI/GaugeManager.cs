@@ -18,6 +18,13 @@ public class GaugeManager : MonoBehaviour
     const string AnimatorAltGaugeString = "GaugeAlt";
 
     float gaugeValue;
+    Vector3 baseScale;
+    bool isHolding = false;
+
+    void Awake()
+    {
+        baseScale = transform.localScale;
+    }
 
     void Start()
     {
@@ -26,17 +33,23 @@ public class GaugeManager : MonoBehaviour
         EventManager.Instance.AddDelegateListener("ItemModifierChanged", (Action<GaugeSides>)OnModifierChanged);
 
         ApplyAltGaugeVisual(BlackBoard.GetAltGauge(side));
+        ApplySizeMultiplier(BlackBoard.GetGaugeSizeMultiplier(side));
     }
 
     void OnModifierChanged(GaugeSides changedSide)
     {
         if (changedSide != side) return;
         ApplyAltGaugeVisual(BlackBoard.GetAltGauge(side));
+        ApplySizeMultiplier(BlackBoard.GetGaugeSizeMultiplier(side));
+    }
+
+    void ApplySizeMultiplier(float multiplier)
+    {
+        transform.localScale = baseScale * multiplier;
     }
 
     void ApplyAltGaugeVisual(bool alt)
     {
-        // Optional animator bool — add "GaugeAlt" to the controller when you have the alt look ready.
         if (animator == null) return;
 
         foreach (var p in animator.parameters)
@@ -49,24 +62,32 @@ public class GaugeManager : MonoBehaviour
         }
     }
 
+    IEnumerator BreakGraceCoroutine;
+    [SerializeField]float breakGrace = 0.5f;
     void OnUpdateGauge(float value, GaugeSides btnSide)
     {
         if (isbroken) return;
         if (side != btnSide)
             return;
+        isHolding = true;
 
         gaugeValue = value;
 
         animator.SetFloat(AnimatorGaugeAmountString, Mathf.Clamp(value, 0, MaxGaugeAmount));
 
-        if (value >= MaxGaugeAmount - 0.01f)
-            BreakGauge();
+        // --- AGENT: start overheat-grace 1x als gauge vol is (breakPending voorkomt spam) ---
+        if (value >= MaxGaugeAmount - 0.01f && !breakPending)
+        {
+            BreakGraceCoroutine = WaitForSecondsToBreak(breakGrace);
+            StartCoroutine(BreakGraceCoroutine);
+        }
     }
 
     void BreakGauge()
     {
         if (isbroken) return;
         isbroken = true;
+        isHolding = false;
         animator.SetBool("GaugeIsBroken", true);
         BlackBoard.SetGaugeIsBroken(side, isbroken);
         StartCoroutine(WaitForSecondsToResetGauge(BrokenTime));
@@ -77,10 +98,28 @@ public class GaugeManager : MonoBehaviour
         if (isbroken) return;
         if (side != btnSide) return;
 
+        // --- AGENT: cancel overheat-grace meteen bij release (niet pas na 0.5s reset) ---
+        // Anders kan WaitForSecondsToBreak na 0.6s nog BreakGauge() aanroepen terwijl de speler al losliet.
+        CancelBreakGrace();
+
         BlackBoard.SetGaugeValue(side, gaugeValue);
         EventManager.Instance.TriggerUnityEvent(BackgroundManagerEvents.UpdateMeter);
 
         StartCoroutine(WaitForSecondsToResetGauge(0.5f));
+    }
+
+    // --- AGENT: grace stoppen + flags resetten zodat break later weer mogelijk is ---
+    void CancelBreakGrace()
+    {
+        isHolding = false;
+
+        if (BreakGraceCoroutine != null)
+        {
+            StopCoroutine(BreakGraceCoroutine);
+            BreakGraceCoroutine = null;
+        }
+
+        breakPending = false;
     }
 
     IEnumerator WaitForSecondsToResetGauge(float seconds)
@@ -89,6 +128,7 @@ public class GaugeManager : MonoBehaviour
 
         BlackBoard.ResetGauge(side);
         animator.SetFloat(AnimatorGaugeAmountString, 0f);
+        // isHolding / breakPending worden al in CancelBreakGrace() bij release gezet
 
         if (isbroken)
         {
@@ -96,6 +136,18 @@ public class GaugeManager : MonoBehaviour
             isbroken = false;
             BlackBoard.SetGaugeIsBroken(side, isbroken);
         }
+    }
+
+    bool breakPending = false;
+    IEnumerator WaitForSecondsToBreak(float seconds)
+    {
+        breakPending = true; // voorkomt dat OnUpdateGauge elke frame een nieuwe grace start
+        yield return new WaitForSeconds(seconds);
+        breakPending = false;
+
+        // Alleen breaken als ze na de grace-tijd nog steeds vasthouden
+        if (isHolding)
+            BreakGauge();
     }
 }
 

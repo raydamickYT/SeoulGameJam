@@ -8,10 +8,11 @@ public class LongItem : PickupItem
 {
     [SerializeField] float holdMultiplier = 4f;
     [SerializeField] float durationSeconds = 8f;
+    [SerializeField] float SizeMultiplier = 2;
 
     protected override void OnCollected()
     {
         GaugeSides victim = Opposite(intendedSide);
-        manager.ApplyHoldDebuff(victim, holdMultiplier, durationSeconds, altGauge: true);
+        manager.ApplyHoldDebuff(victim, holdMultiplier, durationSeconds, SizeMultiplier, altGauge: true);
     }
 }

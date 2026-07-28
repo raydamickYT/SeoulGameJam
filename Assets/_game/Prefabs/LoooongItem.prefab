@@ -143,3 +143,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LongItem
   holdMultiplier: 4
   durationSeconds: 8
+  SizeMultiplier: 1.5

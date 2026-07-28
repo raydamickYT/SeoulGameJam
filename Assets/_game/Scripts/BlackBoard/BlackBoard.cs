@@ -8,6 +8,8 @@ public static class BlackBoard
 
     public static float TopHoldMultiplier = 1f;
     public static float BottomHoldMultiplier = 1f;
+    public static float TopGaugeSizeMultiplier = 1f;
+    public static float BottomGaugeSizeMultiplier = 1f;
     public static bool TopAltGauge, BottomAltGauge;
 
     public static void SetGaugeValue(GaugeSides side, float value)
@@ -70,5 +72,18 @@ public static class BlackBoard
     public static bool GetAltGauge(GaugeSides side)
     {
         return side == GaugeSides.Top ? TopAltGauge : BottomAltGauge;
+    }
+
+    public static void SetGaugeSizeMultiplier(GaugeSides side, float multiplier)
+    {
+        if (side == GaugeSides.Top)
+            TopGaugeSizeMultiplier = multiplier;
+        else
+            BottomGaugeSizeMultiplier = multiplier;
+    }
+
+    public static float GetGaugeSizeMultiplier(GaugeSides side)
+    {
+        return side == GaugeSides.Top ? TopGaugeSizeMultiplier : BottomGaugeSizeMultiplier;
     }
 }

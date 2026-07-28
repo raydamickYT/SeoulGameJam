@@ -84,12 +84,13 @@ public class ItemManager : MonoBehaviour
     /// <summary>
     /// Debuff the victim (usually the opponent of the item's intended side).
     /// </summary>
-    public void ApplyHoldDebuff(GaugeSides victim, float holdMultiplier, float durationSeconds, bool altGauge)
+    public void ApplyHoldDebuff(GaugeSides victim, float holdMultiplier, float durationSeconds, float sizeMultiplier, bool altGauge)
     {
         if (debuffRoutine != null)
             StopCoroutine(debuffRoutine);
 
         BlackBoard.SetHoldMultiplier(victim, holdMultiplier);
+        BlackBoard.SetGaugeSizeMultiplier(victim, sizeMultiplier);
         BlackBoard.SetAltGauge(victim, altGauge);
         EventManager.Instance.TriggerDelegate("ItemModifierChanged", victim);
 
@@ -101,6 +102,7 @@ public class ItemManager : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         BlackBoard.SetHoldMultiplier(victim, 1f);
+        BlackBoard.SetGaugeSizeMultiplier(victim, 1f);
         BlackBoard.SetAltGauge(victim, false);
         EventManager.Instance.TriggerDelegate("ItemModifierChanged", victim);
         debuffRoutine = null;
