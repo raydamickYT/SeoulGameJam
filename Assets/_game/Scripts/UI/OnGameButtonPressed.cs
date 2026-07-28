@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
+
+/// <summary>
+/// this script manages the event calls from the visual buttons.
+/// </summary>
 public class OnGameButtonPressed : MonoBehaviour
 {
     [SerializeField] private UIDocument _uiDocument;
@@ -12,22 +16,17 @@ public class OnGameButtonPressed : MonoBehaviour
         var btnTop = root.Q<Button>("TopButton");
         var btnBottom = root.Q<Button>("BottomButton");
 
-        btnTop.clicked += TopButtonWasPressed;
+        btnTop.clicked += OnTopButtonPressed;
+        btnBottom.clicked += OnBottomButtonPressed;
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTopButtonPressed()
     {
-
+        Debug.Log("Testing the top button");
     }
 
-    void TopButtonWasPressed()
+    void OnBottomButtonPressed()
     {
-
-    }
-
-    void BottomButtonWasPressed()
-    {
-
+        Debug.Log("Testing the Bottom button");
     }
 }

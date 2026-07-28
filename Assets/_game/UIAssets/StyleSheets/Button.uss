@@ -3,3 +3,62 @@
 
 .background-image {
 }
+
+.button-root {
+    flex-grow: 1;
+    flex-basis: auto;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-self: center;
+    align-content: auto;
+}
+
+.top-button {
+    position: absolute;
+    top: 200px;
+    height: 300px;
+    width: 300px;
+    -unity-text-align: middle-center;
+    text-overflow: clip;
+    background-image: url("project://database/Assets/_game/Assets/Button/button_blue.png?fileID=2800000&guid=e0d8a65f3a095b14f98b262f9bfe03f2&type=3#button_blue");
+    background-color: rgba(0, 0, 0, 0);
+    background-repeat: no-repeat;
+    border-left-color: rgba(149, 149, 149, 0);
+    border-right-color: rgba(149, 149, 149, 0);
+    border-top-color: rgba(149, 149, 149, 0);
+    border-bottom-color: rgba(149, 149, 149, 0);
+    translate: -50% 0;
+    flex-shrink: 1;
+    aspect-ratio: 1;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.top-button:active {
+    background-image: url("project://database/Assets/_game/Assets/Button/button_blue_pressed.png?fileID=2800000&guid=727635c8e26725f4d80fb8204c11c0f3&type=3#button_blue_pressed");
+}
+
+.bottom-button {
+    position: absolute;
+    bottom: 200px;
+    height: 300px;
+    width: 300px;
+    -unity-text-align: middle-center;
+    text-overflow: clip;
+    background-image: url("project://database/Assets/_game/Assets/Button/button_red.png?fileID=2800000&guid=79f7c22bb3574d54f8b83c5a81c27295&type=3#button_red");
+    background-color: rgba(0, 0, 0, 0);
+    background-repeat: no-repeat;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    border-left-color: rgba(149, 149, 149, 0);
+    border-right-color: rgba(149, 149, 149, 0);
+    border-top-color: rgba(149, 149, 149, 0);
+    border-bottom-color: rgba(149, 149, 149, 0);
+    translate: -50% 0;
+    aspect-ratio: 1;
+    max-width: none;
+    max-height: none;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.bottom-button:active {
+    background-image: url("project://database/Assets/_game/Assets/Button/button_red_Pressed.png?fileID=2800000&guid=6b9f7254ff3bb6e499f42f67c4975adf&type=3#button_red_Pressed");
+}
