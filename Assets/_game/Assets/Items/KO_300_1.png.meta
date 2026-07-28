@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d3060bd381824c1498b87597e6f8750b
+guid: 724bd978f8a6e6a4baf584bb1c047c5d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7174886626865219236
-    second: gauge_bar5_0
+      213: -4887319926025557155
+    second: KO_300_1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: gauge_bar5_0
+      name: KO_300_1_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 7
-        width: 32
-        height: 20
+        x: 28
+        y: 17
+        width: 245
+        height: 208
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4a6800a7f51529360800000000000000
-      internalID: 7174886626865219236
+      spriteID: d5bee81eb60cc2cb0800000000000000
+      internalID: -4887319926025557155
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      gauge_bar5_0: 7174886626865219236
+      KO_300_1_0: -4887319926025557155
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
