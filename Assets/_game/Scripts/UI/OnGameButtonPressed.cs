@@ -68,6 +68,7 @@ public class OnGameButtonPressed : MonoBehaviour
             BottomButtonCoroutine = null;
         }
 
+        EventManager.Instance.TriggerUnityEvent(GaugeEvents.ResetGauge);
         StopCoroutine(routine);
     }
 
@@ -75,16 +76,19 @@ public class OnGameButtonPressed : MonoBehaviour
     IEnumerator WaitForSeconds(float seconds, Button btn)
     {
         float elapsedTime = 0f;
-        Debug.Log("button name: " + btn.name);
+        int clampedTime = 0;
+        GaugeSides side = btn == btnTop ? GaugeSides.Top : GaugeSides.Bottom;
 
         while (elapsedTime < seconds)
         {
             elapsedTime += Time.deltaTime;
             // Debug.Log("clamped time: " + Mathf.FloorToInt(elapsedTime) + " seconds");
-            EventManager.Instance.TriggerDelegate("GaugeTime", Mathf.FloorToInt(elapsedTime), btn); //update the guages.
+            if (elapsedTime > clampedTime)
+            {
+                clampedTime = Mathf.FloorToInt(elapsedTime);
+                EventManager.Instance.TriggerDelegate(GaugeEvents.UpdateGauge, elapsedTime, side); //update the guages.
+            }
             yield return null;
         }
     }
-
-
 }

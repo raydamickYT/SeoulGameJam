@@ -15,7 +15,7 @@
 
 .top-button {
     position: absolute;
-    top: 200px;
+    top: 30px;
     height: 300px;
     width: 300px;
     -unity-text-align: middle-center;
@@ -31,6 +31,7 @@
     flex-shrink: 1;
     aspect-ratio: 1;
     -unity-background-scale-mode: scale-to-fit;
+    rotate: 180deg;
 }
 
 .top-button:active {
@@ -39,7 +40,7 @@
 
 .bottom-button {
     position: absolute;
-    bottom: 200px;
+    bottom: 30px;
     height: 300px;
     width: 300px;
     -unity-text-align: middle-center;
@@ -61,4 +62,18 @@
 
 .bottom-button:active {
     background-image: url("project://database/Assets/_game/Assets/Button/button_red_Pressed.png?fileID=2800000&guid=6b9f7254ff3bb6e499f42f67c4975adf&type=3#button_red_Pressed");
+}
+
+.middle-part {
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    transform-origin: center 131%;
+    top: auto;
+    justify-content: center;
+    align-items: auto;
+    align-self: auto;
+    align-content: auto;
+    position: absolute;
 }
